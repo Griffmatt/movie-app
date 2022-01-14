@@ -19,6 +19,7 @@
     left: 20px;
     width: 80px;
     object-fit: contain;
+    cursor: pointer;
 }
 
 .nav-avatar{
@@ -26,6 +27,7 @@
     right: 20px;
     width: 40px;
     object-fit: contain;
+    cursor: pointer;
 }
 
 .nav-search{
@@ -33,5 +35,6 @@
     right: 70px;
     width: 35px;
     object-fit: contain;
+    cursor: pointer;
 
 }

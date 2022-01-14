@@ -3,10 +3,11 @@ import axios from '../axios';
 import YouTube from 'react-youtube';
 import movieTrailer from 'movie-trailer';
 
-
 function MovieRow({ title, fetchUrl, largeRow }) {
     const [movies, setMovies]= useState([]);
     const [trailerUrl, setTrailerUrl] = useState("")
+    const [shownTrailerId, setShownTrailerId] = useState()
+    
 
     const base_url = "https://image.tmdb.org/t/p/w300"
 
@@ -20,7 +21,7 @@ function MovieRow({ title, fetchUrl, largeRow }) {
     }, [fetchUrl]);
 
     const opts = {
-        height: "425",
+        height: "750",
         width: "100%",
         playerVars: {
             autoplay: 1,
@@ -28,7 +29,8 @@ function MovieRow({ title, fetchUrl, largeRow }) {
     }
 
     const handleClick =(movie)=> {
-        if(trailerUrl){
+
+        if(trailerUrl && shownTrailerId===movie.id){
             setTrailerUrl("")
         }
         else{
@@ -36,9 +38,9 @@ function MovieRow({ title, fetchUrl, largeRow }) {
             .then((url) => {
                 const urlParams = new URLSearchParams(new URL(url).search);
                 setTrailerUrl(urlParams.get('v'));
+                setShownTrailerId(movie.id)  
             }).catch((error) => console.log(error))
         }
-        console.log(trailerUrl)
     }
 
     return (
@@ -52,12 +54,12 @@ function MovieRow({ title, fetchUrl, largeRow }) {
                             onClick={() => handleClick(movie)}
                             className="row-poster" 
                             src={`${base_url}${largeRow?movie.poster_path:movie.backdrop_path}`} 
-                            alt={movie.name}
+                            alt={movie.title}
                         />
                     )
                 })}
             </div>
-            {trailerUrl && <YouTube videoId={trailerUrl} opts ={opts} />}
+            {trailerUrl && largeRow && <YouTube videoId={trailerUrl} opts ={opts} /> }
         </div>
     )
 }

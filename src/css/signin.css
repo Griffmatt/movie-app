@@ -1,0 +1,48 @@
+.signin {
+    max-width: 50rem;
+    padding: 3vw;
+    margin-left: auto;
+    margin-right : auto;
+    background: rgba(0, 0, 0, 0.85);
+    max-width: 600px;
+}
+
+.signin > form {
+    display: grid;
+    flex-direction: column;
+}
+
+.signin-gray{
+    color: gray;
+}
+
+.signin-signup:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.signin > form > h4 {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 1.25rem;
+}
+
+.signin > form > input {
+    padding: 5px 15px;
+    outline-width: 0;
+    height: 40px;
+    border: none;
+    margin-bottom: 14px;
+    border-radius: 5px;
+}
+
+.signin > form > button {
+    padding: 10px 20px;
+    height: 40px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: #e50914;
+    color: #fff;
+    border: none;
+}

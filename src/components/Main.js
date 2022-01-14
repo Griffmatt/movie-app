@@ -1,30 +1,48 @@
-import React, { Component } from 'react'
-import MovieRow from './MovieRow';
-import MovieBanner from './MovieBanner';
-import requests from '../shared/requests';
-import Nav from './Nav';
+import React, { useEffect } from 'react'
 
-class Main extends Component{
+import HomeScreen from './Screens/HomeScreen';
+import LoginScreen from './Screens/LoginScreen';
+import ProfileScreen from './Screens/ProfileScreen';
+
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import { auth } from '../firebase';
+import { useDispatch, useSelector} from 'react-redux'
+import { logout, login, selectUser } from '../redux/userSlice'
+
+
+function Main (){  
     
-    render(){
-        return (
-        <>
-            <Nav/>
-            <MovieBanner/>
-            <MovieRow title="Trending Now" fetchUrl={requests.fetchTrending} largeRow/>
-            <MovieRow title="Popular" fetchUrl={requests.fetchPopular}/>
-            <MovieRow title="Action" fetchUrl={requests.fetchAction}/>
-            <MovieRow title="Adventure" fetchUrl={requests.fetchAdventure}/>
-            <MovieRow title="Animation" fetchUrl={requests.fetchAnimation}/>
-            <MovieRow title="Comedy" fetchUrl={requests.fetchComedy}/>
-            <MovieRow title="Drama" fetchUrl={requests.fetchDrama}/>   
-            <MovieRow title="Horror" fetchUrl={requests.fetchHorror}/>  
-            <MovieRow title="Musical" fetchUrl={requests.fetchMusical}/>  
-            <MovieRow title="Romance" fetchUrl={requests.fetchRomance}/>  
-            <MovieRow title="Science Fiction" fetchUrl={requests.fetchScienceFiction}/>          
-        </>
-    )
-    }
+    const user = useSelector(selectUser);
+    const dispatch = useDispatch();
+
+    useEffect(() =>{
+        const unsubscribe = auth.onAuthStateChanged(userAuth => {
+            if (userAuth) {
+                console.log(userAuth)
+                dispatch(login({
+                    uid: userAuth.uid,
+                    email: userAuth.email,
+                }));
+            } else {
+                dispatch(logout())
+            }
+        });
+
+        return unsubscribe;
+    }, [dispatch]);
+
+    return (
+        <Router>
+            {!user ? (
+                <LoginScreen/>
+            ):(
+                <Routes>
+                    <Route exact path="/profile" element={<ProfileScreen/>}/>
+                    <Route exact path="/" element={<HomeScreen/>}/>                  
+                </Routes>
+            )}
+        </Router>           
+    )  
 }
 
 export default Main;

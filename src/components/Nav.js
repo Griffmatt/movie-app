@@ -1,8 +1,11 @@
 import React, { useState, useEffect} from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function Nav() {
 
     const [show, handleShow] = useState(false);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         window.addEventListener("scroll", () => {
@@ -21,6 +24,7 @@ function Nav() {
     return (
         <div className={`nav ${show && "nav-black"}`}>
             <img
+                onClick={() => navigate("/")}
                 className="nav-logo"
                 src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
                 alt="Griff Reviews"
@@ -31,6 +35,7 @@ function Nav() {
                 alt="Search"
             />
             <img
+                onClick={() => navigate("/profile")}
                 className="nav-avatar"
                 src="https://www.pinclipart.com/picdir/big/526-5262740_rammy-from-castle-crashers-clipart.png"
                 alt="Your Avatar"

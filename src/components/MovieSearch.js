@@ -12,7 +12,6 @@ function MovieSearch({movies}){
         })}
     </>
     )
-
 }
 
 export default MovieSearch;
