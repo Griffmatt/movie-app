@@ -5,9 +5,10 @@ import requests from '../../shared/requests';
 import Nav from '../Nav';
 
 function HomeScreen() {
+
     return (
         <>
-             <Nav/>
+            <Nav/>
             <MovieBanner/>
             <MovieRow title="Trending Now" fetchUrl={requests.fetchTrending} largeRow/>
             <MovieRow title="Popular" fetchUrl={requests.fetchPopular}/>

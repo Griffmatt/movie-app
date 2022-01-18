@@ -7,6 +7,7 @@ function MovieRow({ title, fetchUrl, largeRow }) {
     const [movies, setMovies]= useState([]);
     const [trailerUrl, setTrailerUrl] = useState("")
     const [shownTrailerId, setShownTrailerId] = useState()
+    const [showModal, setShowModal] = useState()
     
 
     const base_url = "https://image.tmdb.org/t/p/w300"

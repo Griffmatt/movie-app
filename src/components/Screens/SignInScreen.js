@@ -1,22 +1,33 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import {auth} from '../../firebase';
 
 function SignInScreen() {
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
+    const userNameRef = useRef(null);
+
+    const[signUp, setSignUp] = useState(false);
+
 
     const register = e => {
-        e.preventDefault(); /*prevents from refreshing when button is pressed*/
 
-        auth.createUserWithEmailAndPassword(
+        e.preventDefault();
+        const userName = userNameRef.current.value
+
+      auth.createUserWithEmailAndPassword(
             emailRef.current.value, 
             passwordRef.current.value
             ).then((authUser) => {
                 console.log(authUser)
+                authUser.user.updateProfile({
+                    displayName: userName
+                });
             }).catch(error => {
                 alert(error.message)
             })
+
+
     };
 
     const signIn = e => {
@@ -33,18 +44,38 @@ function SignInScreen() {
     }
 
     return (
-        <div className="signin">
+        <>
+        {signUp? (
+           <div className="signin">
             <form>
-                <h1>Sign In</h1>
-                <input placeholder="Email" type="email" ref={emailRef}/>
-                <input placeholder="Password" type="password" ref={passwordRef}/>
-                <button type="submit" onClick={signIn}>Sign In</button>
+                <h1>Sign Up</h1>
+                <input placeholder="Enter Your Email" type="email" ref={emailRef}/>
+                <input placeholder="Enter Password" type="password" ref={passwordRef}/>
+                <input placeholder="Enter Your Name" type="text" ref={userNameRef}/>
+                <button type="submit" onClick={register}>Sign Up</button>
                 <h4>
-                    <span className="signin-gray">Want to Review? </span>
-                    <span className="signin-signup" onClick={register}>Sign Up now</span>
+                    <span className="signin-signup" onClick={() =>setSignUp(false)}>Back To Sign In</span>
                 </h4>
             </form>
-        </div>
+            </div>
+        ):(
+            <>
+                <div className="signin">
+                <form>
+                    <h1>Sign In</h1>
+                    <input placeholder="Email" type="email" ref={emailRef}/>
+                    <input placeholder="Password" type="password" ref={passwordRef}/>
+                    <button type="submit" onClick={signIn}>Sign In</button>
+                    <h4>
+                        <span className="signin-gray">Want to Review? </span>
+                        <span className="signin-signup" onClick={() =>setSignUp(true)}>Sign Up Now</span>
+                    </h4>
+                </form>
+                </div>
+            </>
+            )
+        }
+        </>
     )
 }
 

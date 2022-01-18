@@ -11,6 +11,7 @@
     margin-right: auto;
     padding-top: 8%;
     max-width: 800px;
+    margin-top: 25px;
 }
 
 .profile-body > h1{
@@ -25,8 +26,14 @@
 
 }
 
-.profile-info > img{
+.profile-info > div > img{
     height: 100px;
+}
+
+.profile-info > div > h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 10px;
 }
 
 .profile-details {
@@ -54,11 +61,32 @@
     cursor: pointer;
 }
 
-.profile-plans{
+.profile-change{
     margin-top: 20px;
 }
 
-.profile-plans > h3{
+.profile-change > h3{
     border-bottom: 1px solid #282c2d;
     padding-bottom: 10px;
+}
+
+.profile-info-row{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    opacity: 0.8;
+}
+
+.profile-info-row:hover{
+    opacity: 1;
+}
+
+.profile-info-row > button{
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #e50914;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
 }
