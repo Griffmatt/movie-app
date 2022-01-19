@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react'
-import {auth} from '../../firebase';
+import db, {auth} from '../../firebase';
+
+import { doc, setDoc } from "firebase/firestore"; 
 
 function SignInScreen() {
 
@@ -23,6 +25,7 @@ function SignInScreen() {
                 authUser.user.updateProfile({
                     displayName: userName
                 });
+                setDoc(doc(db, 'users', authUser.user.uid), { email:  authUser.user.email, uid: authUser.user.uid});
             }).catch(error => {
                 alert(error.message)
             })

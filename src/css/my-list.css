@@ -1,0 +1,17 @@
+.my-list-row{
+    margin-left:20px;
+    color: white;
+}
+
+.my-list-posters{
+    display: flex;
+    align-items: stretch;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    padding: 20px;
+}
+
+.my-list-posters::-webkit-scrollbar {
+    display: none;
+}
+

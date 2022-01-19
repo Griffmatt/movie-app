@@ -7,16 +7,15 @@
 }
 
 .login-logo{
-    position: fixed;
-    left: 0;
-    width: 150px;
+    position: absolute;
+    width: 200px;
     object-fit: contain;  
     padding: 20px;
     cursor: pointer;
 }
 
 .login-btn{
-    position: fixed;
+    position: absolute;
     right: 20px;
     top: 20px;
     padding: 10px 20px;
@@ -43,12 +42,13 @@
 }
 
 .login-body > h1 {
-    font-size: 3.125rem;
+    font-size: 3rem;
     margin-bottom: 20px;
+    font-weight: 700;
 }
 
 .login-body > h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 20px;
 }
@@ -58,7 +58,7 @@
     font-weight: 400;
 }
 
-.login-gradient{
+.login-background{
     width: 100%;
     z-index: 1;
     height: 100vh;

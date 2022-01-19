@@ -25,3 +25,7 @@
 .row-poster:hover{
     transform:scale(1.06) ;
 }
+
+.homescreen{
+    width:100vw;
+}

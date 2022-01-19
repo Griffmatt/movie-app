@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import axios from '../axios';
+import React, { useState} from 'react';
 import { Modal, ModalBody} from 'reactstrap';
 import YouTube from 'react-youtube';
 import movieTrailer from 'movie-trailer';
-import { doc, setDoc } from "firebase/firestore"; 
-import db from '../firebase';
 
 
-function MovieRow({ title, fetchUrl, largeRow, user }) {
-    const [movies, setMovies]= useState([]);
+function MyList({ title, list, user }) {
     const [showModal, setShowModal] = useState(false)
     const [movie, setMovie] = useState([])
     const [trailerUrl, setTrailerUrl] = useState("")
@@ -17,22 +13,12 @@ function MovieRow({ title, fetchUrl, largeRow, user }) {
 
     const base_url = "https://image.tmdb.org/t/p/w300"
 
-    useEffect(() => {
-        async function fetchData() {
-            const request = await axios.get(fetchUrl)
-            setMovies(request.data.results)
-            return request;
-        }
-        fetchData();
-    }, [fetchUrl]);
-
 
     const handleClick =(movie)=> {
         setMovie(movie)
         setShowModal(!showModal)
         setTrailerUrl("")
     }
-
     const handleTrailer =(movie)=> {
         if(trailerUrl && shownTrailerId===movie.id){
             setTrailerUrl("")
@@ -47,18 +33,6 @@ function MovieRow({ title, fetchUrl, largeRow, user }) {
         }
     }
 
-    const handleMylist = (movie)=> {
-        setDoc(doc(db, 'users', user.uid, 'myList', movie.title), {
-            title: movie.title,
-            backdrop_path: movie.backdrop_path,
-            overview: movie.overview,
-            poster_path: movie.poster_path,
-            vote_average: movie.vote_average,
-            vote_count: movie.vote_count,
-            id: movie.id
-        })
-    }
-
     const opts = {
         height: "500",
         width: "100%",
@@ -69,6 +43,8 @@ function MovieRow({ title, fetchUrl, largeRow, user }) {
     }
 
     return (
+        <>
+        {list.length === 0?(<></>):(
         <>
         <Modal isOpen={showModal} className="modal-content" size="xl">
             <header className="modal-banner" 
@@ -93,7 +69,7 @@ function MovieRow({ title, fetchUrl, largeRow, user }) {
                 <div className="modal-bottom-row">
                     <div>
                         <button className="banner-btn" onClick={() => handleTrailer(movie)}>Trailer</button>
-                        <button className="banner-btn" onClick={() => handleMylist(movie)}>My List</button>
+                        <button className="banner-btn" >Added</button>
                     </div>
                     <div className="modal-rating">
                         <img className="modal-star" src="https://upload.wikimedia.org/wikipedia/commons/2/29/Gold_Star.svg" alt="Star"/>
@@ -103,23 +79,26 @@ function MovieRow({ title, fetchUrl, largeRow, user }) {
             </ModalBody>
             {trailerUrl && <YouTube videoId={trailerUrl} opts ={opts} /> }
         </Modal>
-        <div className="movie-row">
+        <div className="my-list-row">
             <h2>{title}</h2>
-            <div className="row-posters">
-                {movies.map(movie=>{
+            <div className="my-list-posters">
+                {list.map(movie=>{
                     return(
-                        <img 
-                            key={movie.id}
-                            onClick={() => handleClick(movie)}
-                            className="row-poster" 
-                            src={`${base_url}${largeRow?movie.poster_path:movie.backdrop_path}`} 
-                            alt={movie.title}
-                        />
+                        <div>
+                            <img 
+                                key={movie.id}
+                                onClick={() => handleClick(movie)}
+                                className="row-poster" 
+                                src={`${base_url}${movie.poster_path}`} 
+                                alt={movie.title}
+                            />
+                        </div>
                     )
                 })}
             </div>
-        </div></>
+        </div></>)}
+        </>
     )
 }
 
-export default MovieRow;
+export default MyList;
