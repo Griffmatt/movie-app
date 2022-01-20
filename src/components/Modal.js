@@ -1,24 +1,20 @@
-import React, { useState} from 'react';
-import { Modal, ModalBody} from 'reactstrap';
+import React, {useState, useEffect} from 'react';
 import YouTube from 'react-youtube';
 import movieTrailer from 'movie-trailer';
+import { doc, setDoc } from "firebase/firestore"; 
+import db from '../firebase';
+import {Modal, ModalBody} from 'reactstrap';
 
-
-function MyList({ title, list, user }) {
-    const [showModal, setShowModal] = useState(false)
-    const [movie, setMovie] = useState([])
+function ModalMovieInfo({ handleClick, user, movies}) {
     const [trailerUrl, setTrailerUrl] = useState("")
     const [shownTrailerId, setShownTrailerId] = useState()
+    const [movie, setMovie] = useState([])
     
+useEffect(() => {
+    setMovie(movies)
+}, [movies])
 
-    const base_url = "https://image.tmdb.org/t/p/w300"
 
-
-    const handleClick =(movie)=> {
-        setMovie(movie)
-        setShowModal(!showModal)
-        setTrailerUrl("")
-    }
     const handleTrailer =(movie)=> {
         if(trailerUrl && shownTrailerId===movie.id){
             setTrailerUrl("")
@@ -33,6 +29,21 @@ function MyList({ title, list, user }) {
         }
     }
 
+    const handleMylistAdd =(movie)=> {
+        setDoc(doc(db, 'users', user.uid, 'myList', movie.title), {
+            title: movie.title,
+            backdrop_path: movie.backdrop_path,
+            overview: movie.overview,
+            poster_path: movie.poster_path,
+            vote_average: movie.vote_average,
+            vote_count: movie.vote_count,
+            id: movie.id
+        } )
+    }
+
+
+    
+
     const opts = {
         height: "500",
         width: "100%",
@@ -41,12 +52,8 @@ function MyList({ title, list, user }) {
         },
         backgroundSize: "cover"
     }
-
-    return (
-        <>
-        {list.length === 0?(<></>):(
-        <>
-        <Modal isOpen={showModal} className="modal-content" size="xl">
+  return(
+      <Modal isOpen={true} className="modal-content" size="xl">
             <header className="modal-banner" 
                 style={{
                     backgroundSize: "cover",
@@ -69,7 +76,7 @@ function MyList({ title, list, user }) {
                 <div className="modal-bottom-row">
                     <div>
                         <button className="banner-btn" onClick={() => handleTrailer(movie)}>Trailer</button>
-                        <button className="banner-btn" >Added</button>
+                        {<button className="banner-btn" onClick={() => handleMylistAdd(movie)}>Add to list</button>}
                     </div>
                     <div className="modal-rating">
                         <img className="modal-star" src="https://upload.wikimedia.org/wikipedia/commons/2/29/Gold_Star.svg" alt="Star"/>
@@ -79,26 +86,7 @@ function MyList({ title, list, user }) {
             </ModalBody>
             {trailerUrl && <YouTube videoId={trailerUrl} opts ={opts} /> }
         </Modal>
-        <div className="my-list-row">
-            <h2>{title}</h2>
-            <div className="my-list-posters">
-                {list.map(movie=>{
-                    return(
-                        <div>
-                            <img 
-                                key={movie.id}
-                                onClick={() => handleClick(movie)}
-                                className="row-poster" 
-                                src={`${base_url}${movie.poster_path}`} 
-                                alt={movie.title}
-                            />
-                        </div>
-                    )
-                })}
-            </div>
-        </div></>)}
-        </>
-    )
+  );
 }
 
-export default MyList;
+export default ModalMovieInfo;

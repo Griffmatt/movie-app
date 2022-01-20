@@ -66,8 +66,8 @@ function SignInScreen() {
                 <div className="signin">
                 <form>
                     <h1>Sign In</h1>
-                    <input placeholder="Email" type="email" ref={emailRef}/>
-                    <input placeholder="Password" type="password" ref={passwordRef}/>
+                    <input value="default@email.com" type="email" ref={emailRef}/>
+                    <input value="123456" type="password" ref={passwordRef}/>
                     <button type="submit" onClick={signIn}>Sign In</button>
                     <h4>
                         <span className="signin-gray">Want to Review? </span>

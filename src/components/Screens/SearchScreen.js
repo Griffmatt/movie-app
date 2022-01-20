@@ -6,14 +6,18 @@ import { Modal, ModalBody} from 'reactstrap';
 import YouTube from 'react-youtube';
 import movieTrailer from 'movie-trailer';
 
-function SearchScreen({fetchUrl}) {
+function SearchScreen({fetchUrl, data}) {
 
+    
     const [searchMovie, setSearchMovie]= useState('')
-    const [movies, setMovies] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [movie, setMovie] = useState([])
     const [trailerUrl, setTrailerUrl] = useState("")
     const [shownTrailerId, setShownTrailerId] = useState()
+    const [movies, setMovies] = useState([])
+    
+    
+
 
     const base_url = "https://image.tmdb.org/t/p/w300"
 
@@ -22,14 +26,14 @@ function SearchScreen({fetchUrl}) {
             const request = await axios.get(`${fetchUrl}${searchMovie}`)
                 setMovies(request.data.results)
             return request;
-
-        
+            
         }
         if(searchMovie===''){
             setSearchMovie('a')
+            
         }
         fetchData();
-    }, [searchMovie]);
+    }, [searchMovie, fetchUrl, data]);
 
     const handleClick =(movie)=> {
         setMovie(movie)
@@ -106,13 +110,14 @@ function SearchScreen({fetchUrl}) {
                 <div className="search-posters">
                     {movies.map(movie=>{
                             return(
+                                movie.poster_path?
                                     <img 
                                         className="search-poster"
                                         onClick={() => handleClick(movie)}
                                         key={movie.id}
                                         src={`${base_url}${movie.poster_path}`} 
                                         alt={movie.title}
-                                    />                  
+                                    />  :<></>                
                             )
                         })}
                 </div>

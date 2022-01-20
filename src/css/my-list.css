@@ -4,8 +4,7 @@
 }
 
 .my-list-posters{
-    display: flex;
-    align-items: stretch;
+    display: inline-flex;
     overflow-y: hidden;
     overflow-x: scroll;
     padding: 20px;
@@ -15,3 +14,21 @@
     display: none;
 }
 
+.my-list-posters::-webkit-scrollbar {
+    display: none;
+}
+
+.my-list-poster{
+    object-fit:contain;
+    width:100%;
+    max-height:400px;
+    margin-right: 10px;
+    opacity: 1; 
+    transition: transform 400ms ease-in-out;
+      
+}
+
+.my-list-poster:hover{
+    transform:scale(1.06) ;
+    opacity: 1
+}

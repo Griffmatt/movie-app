@@ -3,15 +3,17 @@ import axios from '../axios';
 import requests from '../shared/requests';
 import YouTube from 'react-youtube';
 import movieTrailer from 'movie-trailer';
+import db from '../firebase';
+import { doc, setDoc } from "firebase/firestore"; 
 
-function MovieBanner(){
+function MovieBanner({user, update}){
     const [movie, setMovie] = useState([]);
     const [trailerUrl, setTrailerUrl] = useState("")
     const [shownTrailerId, setShownTrailerId] = useState()
 
     useEffect(() =>{
         async function fetchData(){
-            const request = await axios.get(requests.fetchUpcoming);
+            const request = await axios.get(requests.fetchPopular);
             setMovie(
                 request.data.results.filter(movie => movie.title && movie.backdrop_path)[
                     Math.floor(Math.random() * request.data.results.length -1)
@@ -22,6 +24,7 @@ function MovieBanner(){
         fetchData()
     }, [])
 
+    
     const handleClick =(movie)=> {
 
         if(trailerUrl && shownTrailerId===movie.id){
@@ -35,6 +38,19 @@ function MovieBanner(){
                 setShownTrailerId(movie.id)  
             }).catch((error) => console.log(error))
         }
+    }
+
+    const handleMylist = (movie)=> {
+        setDoc(doc(db, 'users', user.uid, 'myList', movie.title), {
+            title: movie.title,
+            backdrop_path: movie.backdrop_path,
+            overview: movie.overview,
+            poster_path: movie.poster_path,
+            vote_average: movie.vote_average,
+            vote_count: movie.vote_count,
+            id: movie.id
+        })
+        update(movie)
     }
 
     const opts = {
@@ -63,7 +79,7 @@ function MovieBanner(){
                     <h1 className="banner-title">{movie.title}</h1>
                     <div className="banner-btns">
                         <button className="banner-btn" onClick={() => handleClick(movie)}>Trailer</button>
-                        <button className="banner-btn">My List</button>
+                        <button className="banner-btn" onClick={() => handleMylist(movie)}>My List</button>
                     </div>
                     <h1 className="banner-description">{truncate(movie?.overview, 150)}</h1>
                 </div>
