@@ -1,18 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import YouTube from 'react-youtube';
 import movieTrailer from 'movie-trailer';
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, deleteDoc} from "firebase/firestore"; 
 import db from '../firebase';
 import {Modal, ModalBody} from 'reactstrap';
 
-function ModalMovieInfo({ handleClick, user, movies}) {
+function ModalMovieInfo({ handleClick, user, movies, myList, listId, setListId, showModal}) {
     const [trailerUrl, setTrailerUrl] = useState("")
     const [shownTrailerId, setShownTrailerId] = useState()
     const [movie, setMovie] = useState([])
+    const [addedMyList, setAddedMyList] = useState(myList)
     
-useEffect(() => {
-    setMovie(movies)
-}, [movies])
+    useEffect(() => {
+        setMovie(movies)
+        setListId(myList.map(a => a.id))
+    }, [movies, myList, addedMyList, setListId])
 
 
     const handleTrailer =(movie)=> {
@@ -30,6 +32,7 @@ useEffect(() => {
     }
 
     const handleMylistAdd =(movie)=> {
+        setAddedMyList(myList.push(movie))
         setDoc(doc(db, 'users', user.uid, 'myList', movie.title), {
             title: movie.title,
             backdrop_path: movie.backdrop_path,
@@ -39,10 +42,17 @@ useEffect(() => {
             vote_count: movie.vote_count,
             id: movie.id
         } )
+     
     }
 
-
-    
+    const handleMylistDel = (movie)=> {
+        for(let i = myList.length - 1; i >= 0; i--) {
+            if(myList[i].title === movie.title) {
+               setAddedMyList(myList.splice(i, 1));
+            }
+        }
+        deleteDoc(doc(db, 'users', user.uid, 'myList', movie.title) )
+    }
 
     const opts = {
         height: "500",
@@ -53,7 +63,7 @@ useEffect(() => {
         backgroundSize: "cover"
     }
   return(
-      <Modal isOpen={true} className="modal-content" size="xl">
+      <Modal isOpen={showModal} className="modal-content" size="xl">
             <header className="modal-banner" 
                 style={{
                     backgroundSize: "cover",
@@ -76,7 +86,7 @@ useEffect(() => {
                 <div className="modal-bottom-row">
                     <div>
                         <button className="banner-btn" onClick={() => handleTrailer(movie)}>Trailer</button>
-                        {<button className="banner-btn" onClick={() => handleMylistAdd(movie)}>Add to list</button>}
+                        {listId.includes(movie.id)?<button className="banner-btn" onClick={() => handleMylistDel(movie)}>Remove</button>:<button className="banner-btn" onClick={() => handleMylistAdd(movie)}>Add to list</button>}
                     </div>
                     <div className="modal-rating">
                         <img className="modal-star" src="https://upload.wikimedia.org/wikipedia/commons/2/29/Gold_Star.svg" alt="Star"/>

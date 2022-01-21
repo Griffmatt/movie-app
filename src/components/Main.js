@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, {useEffect } from 'react'
 
 import HomeScreen from './Screens/HomeScreen';
 import LoginScreen from './Screens/LoginScreen';
@@ -45,7 +45,7 @@ function Main (){
                 <Routes>
                     <Route exact path="/profile" element={<ProfileScreen/>}/>
                     <Route exact path="/" element={<HomeScreen/>}/>   
-                    <Route exact path="/search" element={<SearchScreen fetchUrl={requests.fetchSearch} data={data}/>}/>                
+                    <Route exact path="/search" element={<SearchScreen fetchUrl={requests.fetchSearch}/>}/>                
                 </Routes>
 
             )}

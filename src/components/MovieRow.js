@@ -4,10 +4,11 @@ import ModalMovieInfo from './Modal';
 
 
 
-function MovieRow({ title, fetchUrl, largeRow, user, list,}) {
+function MovieRow({ title, fetchUrl, largeRow, user, myList, listId, setListId}) {
     const [movies, setMovies]= useState([]);
     const [showModal, setShowModal] = useState(false)
     const [movie, setMovie] = useState([])
+  
 
     const base_url = "https://image.tmdb.org/t/p/w300"
 
@@ -27,8 +28,8 @@ function MovieRow({ title, fetchUrl, largeRow, user, list,}) {
 
     return (
         <>
-        {showModal?
-        <ModalMovieInfo showModal={showModal} handleClick={handleClick} user={user} list={list}  movies={movie}/>:<></>}
+        
+        <ModalMovieInfo handleClick={handleClick} user={user} movies={movie} myList={myList} listId={listId} setListId={setListId} showModal={showModal} />
         <div className="movie-row">
             <h2>{title}</h2>
             <div className="row-posters">
