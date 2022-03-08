@@ -43,8 +43,8 @@ function Main (){
                 <LoginScreen/>
             ):(
                 <Routes>
-                    <Route exact path="/profile" element={<ProfileScreen/>}/>
-                    <Route exact path="/" element={<HomeScreen/>}/>   
+                    <Route exact path="/" element={<HomeScreen/>}/>  
+                    <Route exact path="/profile" element={<ProfileScreen/>}/>   
                     <Route exact path="/search" element={<SearchScreen fetchUrl={requests.fetchSearch}/>}/>                
                 </Routes>
 

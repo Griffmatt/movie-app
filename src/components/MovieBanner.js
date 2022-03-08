@@ -4,12 +4,17 @@ import requests from '../shared/requests';
 import YouTube from 'react-youtube';
 import movieTrailer from 'movie-trailer';
 import db from '../firebase';
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, deleteDoc } from "firebase/firestore"; 
 
-function MovieBanner({user, update}){
+function MovieBanner({user, myList, setListId, listId}){
     const [movie, setMovie] = useState([]);
     const [trailerUrl, setTrailerUrl] = useState("")
     const [shownTrailerId, setShownTrailerId] = useState()
+    const [addedMyList, setAddedMyList] = useState(myList)
+
+    useEffect(() => {
+        setListId(myList.map(a => a.id))
+    }, [myList, addedMyList, setListId])
 
     useEffect(() =>{
         async function fetchData(){
@@ -38,9 +43,12 @@ function MovieBanner({user, update}){
                 setShownTrailerId(movie.id)  
             }).catch((error) => console.log(error))
         }
+
+        console.log(movie)
     }
 
-    const handleMylist = (movie)=> {
+    const handleMylistAdd =(movie)=> {
+        setAddedMyList(myList.push(movie))
         setDoc(doc(db, 'users', user.uid, 'myList', movie.title), {
             title: movie.title,
             backdrop_path: movie.backdrop_path,
@@ -49,8 +57,17 @@ function MovieBanner({user, update}){
             vote_average: movie.vote_average,
             vote_count: movie.vote_count,
             id: movie.id
-        })
-        update(movie)
+        } )
+     
+    }
+
+    const handleMylistDel = (movie)=> {
+        for(let i = myList.length - 1; i >= 0; i--) {
+            if(myList[i].title === movie.title) {
+               setAddedMyList(myList.splice(i, 1));
+            }
+        }
+        deleteDoc(doc(db, 'users', user.uid, 'myList', movie.title) )
     }
 
     const opts = {
@@ -79,7 +96,7 @@ function MovieBanner({user, update}){
                     <h1 className="banner-title">{movie.title}</h1>
                     <div className="banner-btns">
                         <button className="banner-btn" onClick={() => handleClick(movie)}>Trailer</button>
-                        <button className="banner-btn" onClick={() => handleMylist(movie)}>My List</button>
+                        {listId.includes(movie.id)?<button className="banner-btn" onClick={() => handleMylistDel(movie)}>Remove</button>:<button className="banner-btn" onClick={() => handleMylistAdd(movie)}>Add to list</button>}
                     </div>
                     <h1 className="banner-description">{truncate(movie?.overview, 150)}</h1>
                 </div>

@@ -12,9 +12,12 @@ function ModalMovieInfo({ handleClick, user, movies, myList, listId, setListId, 
     const [addedMyList, setAddedMyList] = useState(myList)
     
     useEffect(() => {
+        if(!showModal){
+            setTrailerUrl("")
+        }
         setMovie(movies)
         setListId(myList.map(a => a.id))
-    }, [movies, myList, addedMyList, setListId])
+    }, [movies, myList, addedMyList, setListId, showModal])
 
 
     const handleTrailer =(movie)=> {
@@ -63,7 +66,7 @@ function ModalMovieInfo({ handleClick, user, movies, myList, listId, setListId, 
         backgroundSize: "cover"
     }
   return(
-      <Modal isOpen={showModal} className="modal-content" size="xl">
+      <Modal isOpen={showModal} className="modal-content" size="xl" toggle={handleClick}>
             <header className="modal-banner" 
                 style={{
                     backgroundSize: "cover",

@@ -34,7 +34,7 @@ function MyListRow({ user, myList, listId, setListId}) {
                             <img 
                                 key={movie.id}
                                 onClick={() => handleClick(movie)}
-                                className="my-list-poster" 
+                                className="my-list-poster my-list-poster-fade" 
                                 src={`${base_url}${movie.poster_path}`} 
                                 alt={movie.title}
                             />

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import db, {auth} from '../../firebase';
 
 import { doc, setDoc } from "firebase/firestore"; 
+import { useNavigate } from 'react-router-dom'
 
 function SignInScreen() {
 
@@ -10,7 +11,7 @@ function SignInScreen() {
     const userNameRef = useRef(null);
 
     const[signUp, setSignUp] = useState(false);
-
+    const navigate = useNavigate();
 
     const register = e => {
 
@@ -35,7 +36,7 @@ function SignInScreen() {
 
     const signIn = e => {
         e.preventDefault();
-
+        navigate("/")
         auth.signInWithEmailAndPassword(
             emailRef.current.value, 
             passwordRef.current.value
@@ -66,8 +67,8 @@ function SignInScreen() {
                 <div className="signin">
                 <form>
                     <h1>Sign In</h1>
-                    <input value="default@email.com" type="email" ref={emailRef}/>
-                    <input value="123456" type="password" ref={passwordRef}/>
+                    <input  type="email" ref={emailRef} defaultValue="default@mail43.com" />
+                    <input  type="password" ref={passwordRef} defaultValue="password"/>
                     <button type="submit" onClick={signIn}>Sign In</button>
                     <h4>
                         <span className="signin-gray">Want to Review? </span>

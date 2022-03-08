@@ -1,6 +1,10 @@
 {
+  "rules": {
+    ".read": true,
+    ".write": true
+  },
   "hosting": {
-    "public": "public",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",

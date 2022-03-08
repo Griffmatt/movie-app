@@ -25,8 +25,18 @@
     margin-right: 10px;
     opacity: 1; 
     transition: transform 400ms;
+    animation: ease-in-out 2000ms;
       
 }
+
+.my-list-poster-fade{
+    animation: fadeIn .5s linear;
+}
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: .9; }
+  }
 
 .my-list-poster:hover{
     transform:scale(1.06) ;

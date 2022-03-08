@@ -29,13 +29,10 @@ function HomeScreen() {
         
     },[user.uid])
 
-
-   
-
     return (
         <div className="homescreen">
             <Nav />
-            <MovieBanner user={user}  />
+            <MovieBanner user={user}  myList={myList} listId={listId} setListId={setListId}/>
             <MovieRow title="Trending Now" fetchUrl={requests.fetchTrending} largeRow user={user} myList={myList} listId={listId} setListId={setListId} />
             <MovieRow title="Popular" fetchUrl={requests.fetchPopular} user={user}  myList={myList} listId={listId} setListId={setListId}/>
             <MovieRow title="Action" fetchUrl={requests.fetchAction} user={user}  myList={myList} listId={listId} setListId={setListId}/>
